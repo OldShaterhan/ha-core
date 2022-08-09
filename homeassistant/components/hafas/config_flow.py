@@ -25,19 +25,19 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 )
 
 
-class PlaceholderHub:
-    """Placeholder class to make tests pass.
+# class PlaceholderHub:
+#     """Placeholder class to make tests pass.
 
-    TODO Remove this placeholder class and replace with things from your PyPI package.
-    """
+#     TO#DO Remove this placeholder class and replace with things from your PyPI package.
+#     """
 
-    def __init__(self, host: str) -> None:
-        """Initialize."""
-        self.host = host
+#     def __init__(self, host: str) -> None:
+#         """Initialize."""
+#         self.host = host
 
-    async def authenticate(self, username: str, password: str) -> bool:
-        """Test if we can authenticate with the host."""
-        return True
+#     async def authenticate(self, username: str, password: str) -> bool:
+#         """Test if we can authenticate with the host."""
+#         return True
 
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
@@ -53,10 +53,10 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     #     your_validate_func, data["username"], data["password"]
     # )
 
-    hub = PlaceholderHub(data["host"])
+    # hub = PlaceholderHub(data["host"])
 
-    if not await hub.authenticate(data["username"], data["password"]):
-        raise InvalidAuth
+    # if not await hub.authenticate(data["username"], data["password"]):
+    #     raise InvalidAuth
 
     # If you cannot connect:
     # throw CannotConnect
@@ -100,7 +100,3 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 class CannotConnect(HomeAssistantError):
     """Error to indicate we cannot connect."""
-
-
-class InvalidAuth(HomeAssistantError):
-    """Error to indicate there is invalid auth."""
