@@ -4,6 +4,9 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from pyhafas import HafasClient
+from pyhafas.profile import DBProfile
+from pyhafas.types.fptf import Station
 import voluptuous as vol
 
 from homeassistant import config_entries
@@ -19,25 +22,18 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Required("startStation"): str,
         vol.Required("destinationStation"): str,
-        vol.Required("startStationId"): str,
-        vol.Required("destinationStationId"): str,
     }
 )
 
 
-# class PlaceholderHub:
-#     """Placeholder class to make tests pass.
+def validate_station(station: str) -> Station:
+    """Try to get station based on the user input."""
 
-#     TO#DO Remove this placeholder class and replace with things from your PyPI package.
-#     """
-
-#     def __init__(self, host: str) -> None:
-#         """Initialize."""
-#         self.host = host
-
-#     async def authenticate(self, username: str, password: str) -> bool:
-#         """Test if we can authenticate with the host."""
-#         return True
+    client = HafasClient(DBProfile(), debug=True)
+    res = client.locations(station)
+    if res.count == 0:
+        return None
+    return res[0]
 
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
@@ -53,6 +49,14 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     #     your_validate_func, data["username"], data["password"]
     # )
 
+    start_station = await hass.async_add_executor_job(
+        validate_station, data["startStation"]
+    )
+
+    destination_station = await hass.async_add_executor_job(
+        validate_station, data["destinationStation"]
+    )
+
     # hub = PlaceholderHub(data["host"])
 
     # if not await hub.authenticate(data["username"], data["password"]):
@@ -64,7 +68,11 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     # InvalidAuth
 
     # Return info that you want to store in the config entry.
-    return {"title": "Name of the device"}
+    return {
+        "title": f"{start_station.name} to {destination_station.name}",
+        "startStationId": start_station.id,
+        "destinationStationId": destination_station.id,
+    }
 
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
