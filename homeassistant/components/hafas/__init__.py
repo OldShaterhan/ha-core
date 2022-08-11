@@ -15,9 +15,7 @@ PLATFORMS: list[Platform] = [Platform.SENSOR]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up HAFAS from a config entry."""
-    print(entry.data)
-    print(entry.entry_id)
-    print(hass.data.keys())
+    hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = HafasClient(DBProfile(), debug=True)
 
     hass.config_entries.async_setup_platforms(entry, PLATFORMS)
