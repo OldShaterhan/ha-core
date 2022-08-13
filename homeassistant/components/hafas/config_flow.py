@@ -1,4 +1,4 @@
-"""Config flow for HAFAS integration."""
+"""Config flow for HaFAS integration."""
 from __future__ import annotations
 
 import logging
@@ -20,8 +20,9 @@ _LOGGER = logging.getLogger(__name__)
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
-        vol.Required("startStation"): str,
-        vol.Required("destinationStation"): str,
+        vol.Required("start_station"): str,
+        vol.Required("destination_station"): str,
+        vol.Required("only_direct"): bool,
     }
 )
 
@@ -50,11 +51,11 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     # )
 
     start_station = await hass.async_add_executor_job(
-        validate_station, data["startStation"]
+        validate_station, data["start_station"]
     )
 
     destination_station = await hass.async_add_executor_job(
-        validate_station, data["destinationStation"]
+        validate_station, data["destination_station"]
     )
 
     # hub = PlaceholderHub(data["host"])
@@ -67,16 +68,24 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     # If the authentication is wrong:
     # InvalidAuth
 
+    data["start_station_id"] = start_station.id
+    data["destination_station_id"] = destination_station.id
+    data["start_station_name"] = start_station.name
+    data["destination_station_name"] = destination_station.name
+
     # Return info that you want to store in the config entry.
     return {
         "title": f"{start_station.name} to {destination_station.name}",
-        "startStationId": start_station.id,
-        "destinationStationId": destination_station.id,
+        "start_station_name": start_station.name,
+        "destination_station_name": destination_station.name,
+        "start_station_id": start_station.id,
+        "destination_station_id": destination_station.id,
+        "only_direct": data["only_direct"],
     }
 
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for HAFAS."""
+    """Handle a config flow for HaFAS."""
 
     VERSION = 1
 

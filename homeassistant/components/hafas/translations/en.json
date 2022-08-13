@@ -10,8 +10,9 @@
         "step": {
             "user": {
                 "data": {
-                    "startStation": "Start station",
-                    "destinationStation": "Destination station"
+                    "start_station": "Start station",
+                    "destination_station": "Destination station",
+                    "only_direct": "Only direct?"
                 }
             }
         }

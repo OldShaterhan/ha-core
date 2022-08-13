@@ -1,0 +1,20 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Urządzenie jest już skonfigurowane"
+        },
+        "error": {
+            "cannot_connect": "Połączenie nieudane",
+            "unknown": "Nieoczekiwany błąd"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "start_station": "Stacja początkowa",
+                    "destination_station": "Stacja docelowa",
+                    "only_direct": "Tylko bezpośrednie?"
+                }
+            }
+        }
+    }
+}

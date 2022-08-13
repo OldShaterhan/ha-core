@@ -1,4 +1,4 @@
-"""Test the HAFAS config flow."""
+"""Test the HaFAS config flow."""
 from unittest.mock import patch
 
 from homeassistant import config_entries

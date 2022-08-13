@@ -1,1 +1,1 @@
-"""Tests for the HAFAS integration."""
+"""Tests for the HaFAS integration."""

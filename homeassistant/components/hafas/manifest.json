@@ -1,6 +1,6 @@
 {
   "domain": "hafas",
-  "name": "HAFAS",
+  "name": "HaFAS",
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/hafas",
   "requirements": ["pyhafas==0.3.0"],

@@ -1,4 +1,4 @@
-"""The HAFAS integration."""
+"""The HaFAS integration."""
 from __future__ import annotations
 
 from pyhafas import HafasClient
@@ -14,7 +14,7 @@ PLATFORMS: list[Platform] = [Platform.SENSOR]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up HAFAS from a config entry."""
+    """Set up HaFAS from a config entry."""
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = HafasClient(DBProfile(), debug=True)
 

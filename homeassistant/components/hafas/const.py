@@ -1,3 +1,3 @@
-"""Constants for the HAFAS integration."""
+"""Constants for the HaFAS integration."""
 
 DOMAIN = "hafas"
