@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import timedelta
-import json
 from typing import Any
 
 from pyhafas import HafasClient
@@ -27,7 +26,7 @@ async def async_setup_entry(
 
     hafas_client: HafasClient = hass.data[DOMAIN][entry.entry_id]
 
-    print(json.dumps(list(entry.data.keys())))
+    # print(json.dumps(list(entry.data.keys())))
 
     # init does not allow async methods - moved earlier
     start_station = (
@@ -85,6 +84,8 @@ class HafasSensor(SensorEntity):
     @property
     def native_value(self):
         """Return the departure time of the next train."""
+        print("Test")
+        print(str(self._state))
         return self._state
 
     @property
@@ -101,8 +102,11 @@ class HafasSensor(SensorEntity):
         """Get the latest delay from HaFAS and updates the state."""
         self.data.update()
         self._state = f"{self.data.connections[0].get('departure', 'Unknown')}"
-        if self.data.connections[0].get("delay", 0) != 0:
-            self._state += f" + {self.data.connections[0]['delay']}"
+        if (
+            self.data.connections[0].get("delay", 0) != timedelta(0)
+            and self.data.connections[0].get("delay", 0) is not None
+        ):
+            self._state += f" + {str(self.data.connections[0]['delay'])}"
 
 
 class HafasService:
@@ -146,14 +150,17 @@ class HafasService:
 
         for con in all_connections:
             # print(json.dumps(type(con)))
-            test = vars(con)
-            print(json.dumps(list(test.keys()), default=str))
+            connection = vars(con)
+            # print(json.dumps(list(connection.keys()), default=str))
             # leg = getattr(con, "legs")[0]
-            leg: Leg = test["legs"][0]
-            test["departure"] = leg.departure
-            test["arrival"] = leg.arrival
-            test["delay_arrival"] = leg.arrivalDelay
-            test["delay"] = leg.departureDelay
-            test["ontime"] = leg.arrivalDelay == timedelta(minutes=0)
+            leg: Leg = connection["legs"][0]
+            connection["name"] = leg.name
+            connection["cancelled"] = leg.cancelled
+            connection["departure"] = leg.departure
+            connection["arrival"] = leg.arrival
+            connection["delay_arrival"] = leg.arrivalDelay
+            connection["delay"] = leg.departureDelay
+            connection["ontime"] = leg.arrivalDelay == timedelta(minutes=0)
+            connection.pop("legs")
 
-            self.connections.append(test)
+            self.connections.append(connection)
